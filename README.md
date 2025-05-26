@@ -11,14 +11,17 @@ TrackMySubs is a robust backend service designed to help users manage and track 
 - **Environment Configuration**: Uses environment variables for secure configuration.
 
 ## Technologies Used
-- **Node.js**: JavaScript runtime for building the backend.
-- **Express**: Web framework for creating RESTful APIs.
-- **MongoDB**: NoSQL database for storing user and subscription data.
-- **Mongoose**: ODM for MongoDB to manage data schemas.
-- **Upstash Workflows**: Serverless workflow for scheduling email reminders.
-- **JWT**: JSON Web Tokens for secure authentication.
-- **Nodemailer**: For sending email reminders.
-- **dotenv**: For managing environment variables.
+- **Node.js**: JavaScript runtime for building the backend. [nodejs.org](https://nodejs.org)
+- **Express**: Web framework for creating RESTful APIs. [expressjs.com](https://expressjs.com)
+- **MongoDB**: NoSQL database for storing user and subscription data. [mongodb.com](https://www.mongodb.com)
+- **Mongoose**: ODM for MongoDB to manage data schemas. [mongoosejs.com](https://mongoosejs.com)
+- **Upstash Workflows**: Serverless workflow for scheduling and managing email reminders. [upstash.com](https://upstash.com)
+- **Arcjet**: Security platform for rate limiting using the token bucket algorithm. [arcjet.com](https://arcjet.com)
+- **JWT**: JSON Web Tokens for secure authentication. [jwt.io](https://jwt.io)
+- **Nodemailer**: For sending email reminders. [nodemailer.com](https://nodemailer.com)
+- **dayjs**: For date manipulation in workflows. [day.js.org](https://day.js.org)
+- **dotenv**: For managing environment variables. [npmjs.com/package/dotenv](https://www.npmjs.com/package/dotenv)
+
 
 
 ## Technical Details
@@ -31,6 +34,11 @@ TrackMySubs is a robust backend service designed to help users manage and track 
   - Triggers a Nodemailer task via `sendReminderEmail` to send a notification to the user’s email when the reminder date is reached.
   - Uses `dayjs` for precise date calculations and comparisons.
   This serverless approach ensures scalability, eliminates the need for cron jobs, and supports retries for failed email deliveries to ensure reliable notifications.
+
+  ## Email Reminder Example
+Below is an example of the email reminder sent to users for their subscription renewals:
+
+![Email Subscription example](assets/email-sub.png)
 
 
 ## Getting Started
@@ -74,30 +82,27 @@ TrackMySubs is a robust backend service designed to help users manage and track 
 ## API Endpoints
 
 ### Authentication
-- `POST /api/auth/register` - Register a new user
-- `POST /api
-
-/auth/login` - Login a user and return a JWT
-
+- `POST /api/v1/auth/sign-up` - Register a new user
+- `POST /api/v1/auth/sign-in` - Login a user and return a JWT
+- `GET /api/v1/users` - Get all registered users for admin purpose
 ### Subscriptions
-- `GET /api/subscriptions` - Get all subscriptions for the authenticated user
-- `POST /api/subscriptions` - Create a new subscription
-- `PUT /api/subscriptions/:id` - Update a subscription
-- `DELETE /api/subscriptions/:id` - Delete a subscription
+- `GET /api/v1/subscriptions/user/:id` - Get all subscriptions for the authenticated user
+- `POST /api/v1/subscriptions` - Create a new subscription
 
 **Note**: All subscription endpoints require a valid JWT in the `Authorization` header (`Bearer <token>`).
+
 
 ## Example Usage
 ### Register a User
 ```bash
-curl -X POST http://localhost:5000/api/auth/register \
+curl -X POST http://localhost:5000/api/v1/auth/sign-up \
 -H "Content-Type: application/json" \
 -d '{"name":"Harishanan Thevarjah","email":"harish@example.com","password":"securepassword"}'
 ```
 
 ### Create a Subscription
 ```bash
-curl -X POST http://localhost:5000/api/subscriptions \
+curl -X POST http://localhost:5000/api/v1/subscriptions \
 -H "Content-Type: application/json" \
 -H "Authorization: Bearer <your_jwt_token>" \
 -d '{"name": "Youtube Premimum", "price": 11.00, "currency": "GBP", "frequency": "monthly", "category": "entertainment", "startDate": "2025-05-01T00:00:00.000Z", "paymentMethod": "Llyods card"}'
