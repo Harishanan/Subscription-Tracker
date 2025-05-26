@@ -1,6 +1,11 @@
 # 📧 TrackMySubs – Subscription Tracker API
-
 TrackMySubs is a robust backend service designed to help users manage and track their subscriptions. It provides features like automatic email reminders before subscription renewals, secure user authentication, and seamless integration with MongoDB for data persistence. Built with Node.js, Express, Mongoose, and Upstash Workflows, this API is scalable and developer-friendly.
+
+
+  ## Email Reminder Example
+Below is an example of the email reminder sent to users for their subscription renewals:
+![Email Subscription example](assets/email-sub.png)
+
 
 ## Features
 - **User Authentication**: Secure user registration and login with JWT-based authentication.
@@ -34,12 +39,6 @@ TrackMySubs is a robust backend service designed to help users manage and track 
   - Triggers a Nodemailer task via `sendReminderEmail` to send a notification to the user’s email when the reminder date is reached.
   - Uses `dayjs` for precise date calculations and comparisons.
   This serverless approach ensures scalability, eliminates the need for cron jobs, and supports retries for failed email deliveries to ensure reliable notifications.
-
-  ## Email Reminder Example
-Below is an example of the email reminder sent to users for their subscription renewals:
-
-![Email Subscription example](assets/email-sub.png)
-
 
 ## Getting Started
 
@@ -131,3 +130,15 @@ Contributions are welcome! Please follow these steps:
 5. Open a pull request.
 
 
+## Frequently Asked Questions (FAQ)
+1. **What is TrackMySubs, and who is it for?**  
+   TrackMySubs is a backend API for managing and tracking user subscriptions, with features like secure authentication, subscription CRUD operations, and automated email reminders. It’s designed for developers building subscription management applications, such as personal finance tools or subscription tracking apps.
+
+2. **How do I authenticate requests to the API?**  
+   All subscription-related endpoints require a JWT token. Register or log in via `/api/v1/auth/sign-up` or `/api/v1/auth/sign-in` to obtain a token, then include it in the `Authorization` header as `Bearer <token>` for protected routes.
+
+3. **How are email reminders scheduled and sent?**  
+   Email reminders are scheduled using Upstash Workflows, which triggers emails at 7, 5, 2, and 1 day(s) before a subscription’s renewal date. The workflow uses `context.sleepUntil` for precise timing and Nodemailer to send emails. Reminders are only sent for active subscriptions with future renewal dates.
+
+4. **Can I customise the email reminder intervals?**  
+   Yes, you can modify the `REMINDERS` array in `workflows/sendReminders.js` (currently set to `[7, 5, 2, 1]` days). Update the array with your preferred intervals and redeploy the workflow.
